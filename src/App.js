@@ -1,7 +1,21 @@
-import React from 'react';
-import Badge from 'react-bootstrap/Badge';  
+import React from "react";
+import Badge from "react-bootstrap/Badge";
+let marked = require("marked");
 
 export default class App extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      markdown: "",
+    };
+  }
+
+  updateMarkdown(markdown) {
+    this.setState({
+      markdown,
+    });
+  }
 
   render() {
     var variableOne = "Lorem Ipsum";
@@ -11,7 +25,7 @@ export default class App extends React.Component {
       height: "50vh",
       marginLeft: "auto",
       marginRight: "auto",
-      padding: "10px"
+      padding: "10px",
     };
     var outputStyle = {
       width: "400px",
@@ -19,14 +33,14 @@ export default class App extends React.Component {
       backgroundColor: "#DCDCDC",
       marginLeft: "auto",
       marginRight: "auto",
-      padding: "10px"
+      padding: "10px",
     };
-    
+
     return (
       <div className="App">
         <div className="container">
           <div className="row mt-4">
-            <div className="col text-center"> 
+            <div className="col text-center">
               <h1>
                 <Badge className="text-align-center" variant="light">
                   Markdown Previewer
@@ -43,7 +57,15 @@ export default class App extends React.Component {
                   </Badge>
                 </h4>
                 <div className="mark-input">
-                  <textarea className="input" style={inputStyle}>
+                  <textarea
+                    onChange={(e) => {
+                      this.updateMarkdown(e.target.value);
+                    }}
+                    className="input"
+                    style={inputStyle}
+                    value={this.state.markdown}
+                  >
+                    {console.log(this.state.markdown)}
                   </textarea>
                 </div>
               </div>
@@ -55,13 +77,17 @@ export default class App extends React.Component {
                     Previewer
                   </Badge>
                 </h4>
-                <div style={outputStyle}>
-                </div>
+                <div
+                  style={outputStyle}
+                  dangerouslySetInnerHTML={{
+                    __html: marked(this.state.markdown),
+                  }}
+                ></div>
               </div>
             </div>
-          </div>  
+          </div>
         </div>
       </div>
-    )
+    );
   }
 }
